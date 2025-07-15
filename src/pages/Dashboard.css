@@ -1,0 +1,185 @@
+.dashboard-root {
+  min-height: 100vh;
+  background: linear-gradient(120deg, #f8fafc 0%, #e3eafc 100%);
+  color: #202124;
+  font-family: var(--font);
+}
+
+.dashboard-main {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 40px 16px 64px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.dashboard-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  margin-bottom: 8px;
+}
+
+.dashboard-kpi-card {
+  background: rgba(255,255,255,0.85);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(38,198,218,0.08);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #e0e3e7;
+  backdrop-filter: blur(4px);
+}
+.dashboard-kpi-products { box-shadow: 0 8px 32px rgba(38,198,218,0.08); }
+.dashboard-kpi-pending { box-shadow: 0 8px 32px rgba(76,175,80,0.08); }
+.dashboard-kpi-customers { box-shadow: 0 8px 32px rgba(255,152,0,0.08); }
+.dashboard-kpi-outofstock { box-shadow: 0 8px 32px rgba(244,67,54,0.08); }
+.dashboard-kpi-label {
+  font-size: 18px;
+  color: #5f6368;
+  margin-bottom: 8px;
+}
+.dashboard-kpi-value {
+  font-weight: 800;
+  font-size: 38px;
+}
+.dashboard-kpi-primary { color: #1a73e8; }
+.dashboard-kpi-secondary { color: #4caf50; }
+.dashboard-kpi-tertiary { color: #ff9800; }
+.dashboard-kpi-out { color: #f44336; }
+
+.dashboard-filters {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  align-items: center;
+  background: rgba(255,255,255,0.85);
+  border-radius: 8px;
+  padding: 14px;
+  box-shadow: 0 2px 8px rgba(60,64,67,0.06);
+  border: 1px solid #e0e3e7;
+  backdrop-filter: blur(2px);
+}
+.dashboard-filter-label {
+  font-weight: 500;
+  color: #5f6368;
+}
+.dashboard-filter-input {
+  margin-left: 4px;
+  background: #f8fafc;
+  color: #202124;
+  border: 1px solid #e0e3e7;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 15px;
+}
+.dashboard-export-btn {
+  background: #1a73e8;
+  margin-left: 8px;
+  color: #fff;
+}
+
+.dashboard-charts-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.dashboard-chart-card {
+  background: rgba(255,255,255,0.92);
+  border-radius: 8px;
+  box-shadow: 0 4px 24px rgba(38,198,218,0.08);
+  padding: 20px;
+  border: 1px solid #e0e3e7;
+  min-width: 320px;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+}
+.dashboard-chart-title {
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+.dashboard-primary { color: #1a73e8; }
+.dashboard-secondary { color: #4caf50; }
+.dashboard-tertiary { color: #ff9800; }
+
+.dashboard-recent-requests {
+  background: rgba(255,255,255,0.97);
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(60,64,67,0.08);
+  padding: 20px;
+  border: 1px solid #e0e3e7;
+  margin-top: 0;
+  overflow-x: auto;
+}
+.dashboard-recent-title {
+  font-weight: 700;
+  font-size: 22px;
+  color: #202124;
+  margin-bottom: 18px;
+}
+.dashboard-recent-table {
+  background: transparent;
+  color: #202124;
+  min-width: 700px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.dashboard-recent-thead {
+  background: rgba(245,247,250,0.85);
+}
+.dashboard-recent-header-row {
+  font-weight: 700;
+  color: #1a73e8;
+  font-size: 16px;
+}
+.dashboard-recent-th {
+  padding: 12px 16px;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  background: inherit;
+  z-index: 1;
+}
+.dashboard-recent-th-date {
+  min-width: 100px;
+}
+.dashboard-recent-row.even {
+  background: rgba(245,247,250,0.65);
+}
+.dashboard-recent-row.odd {
+  background: rgba(255,255,255,0.85);
+}
+.dashboard-recent-td {
+  padding: 10px 16px;
+}
+.dashboard-status {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 15px;
+  border: 1.5px solid #ff9800;
+  background: rgba(255,152,0,0.10);
+  color: #ff9800;
+}
+.dashboard-status-approved {
+  background: rgba(76,175,80,0.12);
+  color: #388e3c;
+  border-color: #4caf50;
+}
+.dashboard-status-denied {
+  background: rgba(244,67,54,0.12);
+  color: #d32f2f;
+  border-color: #f44336;
+}
+.dashboard-status-pending {
+  background: rgba(255,152,0,0.10);
+  color: #ff9800;
+  border-color: #ff9800;
+} 

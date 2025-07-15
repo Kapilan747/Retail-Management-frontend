@@ -1,0 +1,56 @@
+.add-customer-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 260px;
+    max-width: 320px;
+    background: transparent;
+  }
+  .add-customer-title {
+    text-align: center;
+    margin-bottom: 8px;
+    margin: 0;
+    font-weight: 800;
+    font-size: 20px;
+    color: #1a237e;
+    letter-spacing: 0.2px;
+  }
+  .add-customer-label {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 2px;
+  }
+  .add-customer-input {
+    width: 100%;
+    margin-top: 4px;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #cfd8dc;
+    font-size: 16px;
+    outline: none;
+    background: #f8fafc;
+    transition: border 0.18s;
+  }
+  .add-customer-input.error {
+    border: 1.5px solid #d32f2f;
+  }
+  .add-customer-error {
+    color: #d32f2f;
+    font-size: 13px;
+  }
+  .add-customer-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 8px;
+  }
+  .add-customer-btn {
+    min-width: 90px;
+    font-weight: 600;
+    font-size: 16px;
+  }
+  .add-customer-btn.cancel {
+    background: #888;
+    font-weight: 500;
+  }
+  

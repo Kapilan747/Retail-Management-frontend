@@ -1,0 +1,81 @@
+.userlogin-root {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.userlogin-card-wrapper {
+  width: 100%;
+  max-width: 420px;
+}
+.userlogin-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  padding: 48px 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 8px 32px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px);
+  text-align: center;
+}
+.userlogin-header {
+  margin-bottom: 32px;
+}
+.userlogin-title {
+  font-weight: 800;
+  font-size: 32px;
+  color: #1a73e8;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
+}
+.userlogin-subtitle {
+  color: #5f6368;
+  font-size: 16px;
+  margin: 0;
+  font-weight: 400;
+}
+.userlogin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 32px;
+}
+.userlogin-input {
+  width: 100%;
+  padding: 16px 20px;
+  border: 1px solid #e0e3e7;
+  border-radius: 8px;
+  font-size: 16px;
+  background: #f8fafc;
+  color: #202124;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+.userlogin-input:focus {
+  border-color: #1a73e8;
+  background: #fff;
+  outline: none;
+}
+.userlogin-error {
+  color: #d32f2f;
+  background: #ffebee;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid #ffcdd2;
+}
+.userlogin-submit {
+  width: 100%;
+  padding: 16px 24px;
+  background: #1a73e8;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background 0.18s;
+  margin-top: 8px;
+} 

@@ -1,0 +1,214 @@
+.marketplace-root {
+  min-height: 100vh;
+  background: #f8fafc;
+  color: #202124;
+  font-family: 'Poppins', Arial, sans-serif;
+}
+
+.marketplace-header {
+  height: 64px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 36px;
+  box-shadow: 0 2px 12px rgba(60,64,67,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid #e0e3e7;
+}
+.marketplace-title {
+  font-weight: 900;
+  font-size: 26px;
+  letter-spacing: 1px;
+  color: #1a73e8;
+}
+.marketplace-subtitle {
+  font-weight: 500;
+  font-size: 16px;
+  color: #5f6368;
+  opacity: 0.85;
+}
+
+.marketplace-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 16px 64px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.marketplace-search-row {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(60,64,67,0.08);
+  padding: 18px;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  border: 1px solid #e0e3e7;
+}
+.marketplace-search-input {
+  background: #f8fafc;
+  color: #202124;
+  border: 1px solid #e0e3e7;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 16px;
+  flex: 1;
+}
+
+.marketplace-table-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(60,64,67,0.08);
+  padding: 24px;
+  border: 1px solid #e0e3e7;
+}
+.marketplace-table-title {
+  font-weight: 700;
+  font-size: 20px;
+  color: #1a73e8;
+  margin-bottom: 16px;
+}
+.marketplace-empty {
+  color: #5f6368;
+}
+.marketplace-table-scroll {
+  overflow-x: auto;
+}
+.marketplace-table {
+  background: transparent;
+  color: #202124;
+  min-width: 700px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.marketplace-th {
+  background: #f8fafc;
+  color: #1a73e8;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 14px 18px;
+}
+.marketplace-th-product { border-top-left-radius: 12px; }
+.marketplace-th-action { border-top-right-radius: 12px; }
+.marketplace-row.even { background: #fff; }
+.marketplace-row.odd { background: #f8fafc; }
+.marketplace-row.clickable { cursor: pointer; }
+.marketplace-td {
+  padding: 14px 18px;
+  border-bottom: 1px solid #e0e3e7;
+}
+.marketplace-td-product { border-left: 0; border-top-left-radius: 10px; }
+.marketplace-td-action { border-right: 0; border-top-right-radius: 10px; }
+.marketplace-request-btn {
+  background: #1a73e8;
+  color: #fff;
+  min-width: 120px;
+}
+.marketplace-request-btn.disabled {
+  background: #b0bec5;
+  color: #fff;
+  cursor: not-allowed;
+}
+
+.marketplace-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.marketplace-modal-card {
+  min-width: 400px;
+  max-width: 500px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 32px;
+}
+.marketplace-modal-title {
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #1a73e8;
+}
+.marketplace-modal-section {
+  margin-bottom: 20px;
+}
+.marketplace-modal-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #202124;
+}
+.marketplace-modal-product {
+  padding: 12px 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e0e3e7;
+  color: #202124;
+}
+.marketplace-modal-qty-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #e0e3e7;
+  border-radius: 8px;
+  font-size: 16px;
+}
+.marketplace-modal-stock {
+  font-size: 14px;
+  color: #5f6368;
+  margin-top: 4px;
+}
+.marketplace-modal-summary {
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e0e3e7;
+}
+.marketplace-modal-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.marketplace-modal-summary-row.total {
+  border-top: 1px solid #e0e3e7;
+  padding-top: 8px;
+  margin-bottom: 0;
+}
+.marketplace-modal-summary-label {
+  color: #5f6368;
+}
+.marketplace-modal-summary-label.total {
+  font-weight: 700;
+  color: #1a73e8;
+  font-size: 16px;
+}
+.marketplace-modal-summary-value.total {
+  font-weight: 700;
+  color: #1a73e8;
+  font-size: 18px;
+}
+.marketplace-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+.marketplace-modal-cancel {
+  background: #5f6368;
+  color: #fff;
+}
+.marketplace-modal-submit {
+  background: #1a73e8;
+  color: #fff;
+} 

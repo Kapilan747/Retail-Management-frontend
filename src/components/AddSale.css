@@ -1,0 +1,45 @@
+.add-sale-container {
+  max-width: 950px;
+  margin: 0 auto;
+  margin-bottom: 24px;
+  padding: 0;
+}
+.add-sale-title {
+  margin: 32px 0 18px 0;
+  font-weight: 700;
+  font-size: 24px;
+  color: #1a237e;
+  letter-spacing: 0.5px;
+}
+.add-sale-form {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  align-items: center;
+  background: none;
+  box-shadow: none;
+  padding: 18px 0 18px 0;
+  margin: 0;
+}
+.add-sale-select {
+  margin-right: 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #cfd8dc;
+  font-size: 16px;
+  min-width: 160px;
+}
+.add-sale-input {
+  width: 100px;
+  margin-right: 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #cfd8dc;
+  font-size: 16px;
+}
+.add-sale-btn {
+  min-width: 120px;
+  font-size: 15px;
+  padding: 8px 16px;
+  margin-left: 0;
+} 

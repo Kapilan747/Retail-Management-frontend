@@ -1,0 +1,150 @@
+.place-order-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.18);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.place-order-modal-card {
+  min-width: 700px;
+  max-width: 900px;
+  min-height: 380px;
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.place-order-modal-products {
+  flex: 1;
+  padding: 32px;
+  border-right: 1px solid #e0e3e7;
+  max-height: 480px;
+  overflow-y: auto;
+  background: #fff;
+}
+
+.place-order-modal-title {
+  margin-bottom: 18px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a73e8;
+  letter-spacing: 0.01em;
+}
+
+.place-order-modal-label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 15px;
+  color: #222;
+}
+
+.place-order-modal-product-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.place-order-modal-product-btn {
+  background: #e0e3e7;
+  color: #222;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: none;
+  transition: background 0.18s, color 0.18s;
+  margin-bottom: 4px;
+}
+.place-order-modal-product-btn.selected {
+  background: #1a73e8;
+  color: #fff;
+}
+
+.place-order-modal-summary-form {
+  flex: 1.2;
+  padding: 32px;
+  max-height: 480px;
+  overflow-y: auto;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+}
+
+.place-order-modal-summary-table {
+  width: 100%;
+  font-size: 15px;
+  margin-bottom: 8px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.place-order-modal-summary-table th,
+.place-order-modal-summary-table td {
+  padding: 6px;
+  text-align: left;
+}
+.place-order-modal-summary-table th:nth-child(2),
+.place-order-modal-summary-table td:nth-child(2) {
+  text-align: center;
+}
+.place-order-modal-summary-table th:nth-child(3),
+.place-order-modal-summary-table td:nth-child(3) {
+  text-align: right;
+}
+
+.place-order-modal-qty-input {
+  width: 48px;
+  padding: 4px;
+  border: 1px solid #e0e3e7;
+  border-radius: 6px;
+  font-size: 15px;
+  background: #fff;
+}
+
+.place-order-modal-remove-btn {
+  background: #f44336;
+  color: #fff;
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: none;
+  margin-left: 2px;
+}
+
+.place-order-modal-total {
+  text-align: right;
+  font-weight: 700;
+  color: #1a73e8;
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+.place-order-modal-empty {
+  color: #888;
+  font-size: 15px;
+  margin-bottom: 16px;
+}
+
+.place-order-modal-actions {
+  gap: 12px;
+  justify-content: flex-end;
+  display: flex;
+}
+
+.place-order-modal-cancel {
+  background: #888;
+  color: #fff;
+}
+
+.place-order-modal-submit {
+  background: #1a73e8;
+  color: #fff;
+} 

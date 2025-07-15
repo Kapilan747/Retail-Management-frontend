@@ -1,0 +1,66 @@
+.add-product-root {
+  margin-bottom: 0;
+  max-width: 420px;
+  width: 100%;
+  border-radius: 18px;
+  box-sizing: border-box;
+  box-shadow: 0 8px 32px rgba(60,64,67,0.13);
+  background: linear-gradient(120deg, #f8fafc 0%, #e3f2fd 100%);
+  padding: 32px 18px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.add-product-title {
+  font-weight: 800;
+  font-size: 24px;
+  color: #2563eb;
+  margin-bottom: 18px;
+  letter-spacing: 0.01em;
+  text-align: center;
+}
+
+.add-product-form {
+  gap: 18px;
+  flex-direction: column;
+}
+
+.add-product-row {
+  display: flex;
+  gap: 14px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.add-product-input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  font-size: 17px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1.5px solid #cfd8dc;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.add-product-actions {
+  display: flex;
+  gap: 14px;
+  width: 100%;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.add-product-submit {
+  min-width: 120px;
+  font-size: 17px;
+  padding: 12px 0;
+}
+
+.add-product-cancel {
+  background: #888;
+  font-size: 17px;
+  padding: 12px 0;
+  color: #fff;
+} 
