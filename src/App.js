@@ -85,7 +85,7 @@ function App() {
       window.removeEventListener('keypress', handleActivity);
       window.removeEventListener('click', handleActivity);
     };
-  }, [user, handleLogout, showToast]);
+  }, [user]);
 
   const clearUserActivity = async (userId) => {
     try {
@@ -95,16 +95,15 @@ function App() {
     }
   };
 
-  const handleLogout = useCallback(async () => {
-    const currentUser = JSON.parse(localStorage.getItem('user') || 'null');
-    if (currentUser && currentUser.id) {
-      await clearUserActivity(currentUser.id);
+  const handleLogout = async () => {
+    if (user && user.id) {
+      await clearUserActivity(user.id);
     }
     localStorage.removeItem('user');
     setUser(null);
     navigate('/');
     setToast({ open: true, message: 'Logged out', color: '#1976d2' });
-  }, [navigate]);
+  };
 
   const showToast = useCallback((message, color) => {
     setToast({ open: true, message, color });
