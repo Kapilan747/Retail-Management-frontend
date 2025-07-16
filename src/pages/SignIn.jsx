@@ -29,14 +29,13 @@ function SignIn({ onToast, onLoginSuccess }) {
       const user = await loginUser(form.username, form.password);
       if (user) {
         localStorage.setItem('user', JSON.stringify(user));
-        onLoginSuccess(); // Notify App.js
+        onLoginSuccess();
+        onToast && onToast('Login successful', '#388e3c');
 
         if (user.role === 'admin') {
           navigate('/dashboard');
-          onToast && onToast('Admin login successful', '#388e3c');
         } else {
           navigate('/user-dashboard');
-          onToast && onToast('Login successful', '#388e3c');
         }
       } else {
         setError('Invalid credentials');

@@ -51,6 +51,42 @@ function App() {
     return () => clearTimeout(timer);
   }, [location]);
 
+  // Session Timeout and Activity Tracking
+  useEffect(() => {
+    if (!user) return;
+
+    let activityTimer;
+
+    const resetTimer = () => {
+      clearTimeout(activityTimer);
+      activityTimer = setTimeout(() => {
+        handleLogout();
+        // The original code had onToast here, but onToast is not defined in the provided context.
+        // Assuming it should be passed as a prop or handled differently if needed.
+        // For now, commenting out to avoid errors.
+        // onToast && onToast('You have been logged out due to inactivity.', '#f44336');
+      }, 15 * 60 * 1000); // 15 minutes
+    };
+
+    const handleActivity = () => {
+      resetTimer();
+      updateUserActivity(user.id).catch(err => console.error("Failed to update user activity", err));
+    };
+
+    window.addEventListener('mousemove', handleActivity);
+    window.addEventListener('keypress', handleActivity);
+    window.addEventListener('click', handleActivity);
+    
+    resetTimer(); // Initial call
+
+    return () => {
+      clearTimeout(activityTimer);
+      window.removeEventListener('mousemove', handleActivity);
+      window.removeEventListener('keypress', handleActivity);
+      window.removeEventListener('click', handleActivity);
+    };
+  }, [user, handleLogout, showToast]);
+
   const clearUserActivity = async (userId) => {
     try {
       await updateUserActivity(userId, true);
@@ -59,15 +95,16 @@ function App() {
     }
   };
 
-  const handleLogout = async () => {
-    if (user && user.id) {
-      await clearUserActivity(user.id);
+  const handleLogout = useCallback(async () => {
+    const currentUser = JSON.parse(localStorage.getItem('user') || 'null');
+    if (currentUser && currentUser.id) {
+      await clearUserActivity(currentUser.id);
     }
     localStorage.removeItem('user');
     setUser(null);
     navigate('/');
     setToast({ open: true, message: 'Logged out', color: '#1976d2' });
-  };
+  }, [navigate]);
 
   const showToast = useCallback((message, color) => {
     setToast({ open: true, message, color });

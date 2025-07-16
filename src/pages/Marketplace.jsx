@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { getProducts, getUsers, addOrder } from '../services/api';
+import React, { useEffect, useState, useMemo } from 'react';
+import { getProducts, addOrder } from '../services/api';
 import './Marketplace.css';
 
 function Marketplace({ onToast }) {
   const [products, setProducts] = useState([]);
-  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [showQuantityModal, setShowQuantityModal] = useState(false);
@@ -14,12 +13,13 @@ function Marketplace({ onToast }) {
 
   const fetchAll = async () => {
     setLoading(true);
-    const [productRes, userRes] = await Promise.all([
-      getProducts(),
-      getUsers()
-    ]);
-    setProducts(productRes.data);
-    setUsers(userRes.data);
+    try {
+      const productRes = await getProducts();
+      setProducts(productRes.data);
+    } catch (err) {
+      console.error("Failed to fetch products:", err);
+      onToast && onToast('Failed to load products', '#d32f2f');
+    }
     setLoading(false);
   };
 
@@ -46,7 +46,7 @@ function Marketplace({ onToast }) {
         status: 'pending',
         date: new Date().toISOString(),
         quantity: quantity,
-        productId: selectedProduct.id,
+        productId: selectedProduct._id || selectedProduct.id,
         productName: selectedProduct.name,
         price: selectedProduct.price
       };
@@ -62,10 +62,21 @@ function Marketplace({ onToast }) {
     }
   };
 
-  const filteredProducts = products.filter(p =>
+  const filteredProducts = useMemo(() => products.filter(p =>
     (p.name || '').toLowerCase().includes(search.toLowerCase()) ||
     (p.category || '').toLowerCase().includes(search.toLowerCase())
-  );
+  ), [products, search]);
+
+  const productsByCategory = useMemo(() => {
+    return filteredProducts.reduce((acc, product) => {
+      const category = product.category || 'General';
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(product);
+      return acc;
+    }, {});
+  }, [filteredProducts]);
 
   return (
     <div className="marketplace-root">
@@ -83,8 +94,41 @@ function Marketplace({ onToast }) {
             className="marketplace-search-input"
           />
         </div>
+
+        {/* Resources by Category */}
+        <div className="marketplace-category-section">
+          <h2 className="marketplace-section-title">Resources by Category</h2>
+          {loading ? (
+            <div>Loading categories...</div>
+          ) : Object.keys(productsByCategory).length === 0 ? (
+            <div className="marketplace-empty">No categories found.</div>
+          ) : (
+            Object.keys(productsByCategory).map(category => (
+              <div key={category} className="marketplace-category-card">
+                <h3 className="marketplace-category-title">{category}</h3>
+                <div className="marketplace-product-grid">
+                  {productsByCategory[category].map(p => (
+                    <div key={p._id || p.id} className="marketplace-product-card">
+                      <div className="marketplace-product-name">{p.name}</div>
+                      <div className="marketplace-product-price">₹{p.price}</div>
+                      <div className="marketplace-product-stock">Stock: {p.stock}</div>
+                      <button 
+                        className={`btn marketplace-request-btn${p.stock <= 0 ? ' disabled' : ''}`} 
+                        disabled={p.stock <= 0} 
+                        onClick={() => handleRequestGoods(p)}
+                      >
+                        {p.stock > 0 ? 'Request' : 'Out of Stock'}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
         <div className="marketplace-table-card">
-          <div className="marketplace-table-title">Available Goods</div>
+          <div className="marketplace-table-title">All Available Goods</div>
           {loading ? <div>Loading...</div> : filteredProducts.length === 0 ? <div className="marketplace-empty">No goods available.</div> : (
             <div className="marketplace-table-scroll">
               <table className="table marketplace-table">

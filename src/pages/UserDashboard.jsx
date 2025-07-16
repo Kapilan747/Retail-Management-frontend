@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { getProducts, getOrders } from '../services/api';
+import React, { useEffect, useState, useMemo } from 'react';
+import { getOrders } from '../services/api';
 import PlaceOrderModal from '../components/PlaceOrderModal';
 import { motion } from 'framer-motion';
 import { BarChart, Bar, XAxis, YAxis, Tooltip as RTooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend as RLegend } from 'recharts';
@@ -24,7 +24,6 @@ const slideIn = {
 };
 
 function UserDashboard({ onToast }) {
-  const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showOrderModal, setShowOrderModal] = useState(false);
@@ -34,16 +33,50 @@ function UserDashboard({ onToast }) {
   const [orderStatusFilter, setOrderStatusFilter] = useState('');
   const user = JSON.parse(localStorage.getItem('user') || 'null');
 
-  const filteredProducts = categoryFilter ? products.filter(p => p.category === categoryFilter) : products;
-  const filteredOrders = orders.filter(o => {
+  const fetchOrders = async () => {
+    setLoading(true);
+    try {
+      const orderRes = await getOrders();
+      setOrders(orderRes.data.filter(o => o.userId === user.id));
+    } catch (err) {
+      console.error("Failed to fetch orders:", err);
+      onToast && onToast('Failed to load orders', '#d32f2f');
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, [user.id]);
+
+  const myResources = useMemo(() => {
+    const approvedOrders = orders.filter(o => o.status === 'approved');
+    return approvedOrders.map(order => ({
+      id: order.productId,
+      name: order.productName,
+      category: order.productCategory || 'General', // Assuming category is stored
+      price: order.price,
+      stock: order.quantity, // Represents the quantity owned by the user
+    }));
+  }, [orders]);
+
+  const filteredResources = useMemo(() => {
+    return myResources.filter(r => {
+      let pass = true;
+      if (categoryFilter && r.category !== categoryFilter) pass = false;
+      return pass;
+    });
+  }, [myResources, categoryFilter]);
+
+  const filteredOrders = useMemo(() => orders.filter(o => {
     let pass = true;
     if (dateFrom && new Date(o.date) < new Date(dateFrom)) pass = false;
     if (dateTo && new Date(o.date) > new Date(dateTo)) pass = false;
     if (orderStatusFilter && o.status !== orderStatusFilter) pass = false;
     return pass;
-  });
+  }), [orders, dateFrom, dateTo, orderStatusFilter]);
 
-  const resourcesByCategory = filteredProducts.reduce((acc, p) => {
+  const resourcesByCategory = filteredResources.reduce((acc, p) => {
     acc[p.category] = (acc[p.category] || 0) + 1;
     return acc;
   }, {});
@@ -63,23 +96,6 @@ function UserDashboard({ onToast }) {
     saveAs(blob, 'orders.csv');
   };
 
-  const fetchAll = async () => {
-    setLoading(true);
-    const [prodRes, orderRes] = await Promise.all([
-      getProducts(),
-      getOrders()
-    ]);
-    setProducts(prodRes.data.filter(p => p.ownerId === user.id));
-    setOrders(orderRes.data.filter(o => o.userId === user.id));
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchAll();
-    const interval = setInterval(fetchAll, 10000);
-    return () => clearInterval(interval);
-  }, [user.id]);
-
   return (
     <motion.div
       variants={bounceIn}
@@ -87,7 +103,7 @@ function UserDashboard({ onToast }) {
       animate="visible"
       className="userdashboard-root"
     >
-      <PlaceOrderModal open={showOrderModal} onClose={() => setShowOrderModal(false)} onToast={onToast} userId={user.id} onOrderPlaced={fetchAll} />
+      <PlaceOrderModal open={showOrderModal} onClose={() => setShowOrderModal(false)} onToast={onToast} userId={user.id} onOrderPlaced={fetchOrders} />
       <motion.div className="card userdashboard-welcome-card" variants={popIn} initial="hidden" animate="visible">
         <h2 className="userdashboard-welcome-title">Welcome, {user.name || user.username}!</h2>
         <p className="userdashboard-welcome-desc">This is your dashboard. You can view your resources, orders, and place new orders or request goods.</p>
@@ -98,7 +114,7 @@ function UserDashboard({ onToast }) {
       <div className="userdashboard-filters dashboard-filters">
         <label className="userdashboard-filter-label">From: <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="userdashboard-filter-input" /></label>
         <label className="userdashboard-filter-label">To: <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="userdashboard-filter-input" /></label>
-        <label className="userdashboard-filter-label">Category: <select value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)} className="userdashboard-filter-input"><option value="">All</option>{[...new Set(products.map(p => p.category))].map(cat => <option key={cat} value={cat}>{cat}</option>)}</select></label>
+        <label className="userdashboard-filter-label">Category: <select value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)} className="userdashboard-filter-input"><option value="">All</option>{[...new Set(myResources.map(r => r.category))].map(cat => <option key={cat} value={cat}>{cat}</option>)}</select></label>
         <label className="userdashboard-filter-label">Order Status: <select value={orderStatusFilter} onChange={e => setOrderStatusFilter(e.target.value)} className="userdashboard-filter-input"><option value="">All</option>{[...new Set(orders.map(o => o.status))].map(st => <option key={st} value={st}>{st}</option>)}</select></label>
         <div className="button-row userdashboard-export-row">
           <button className="btn userdashboard-export-btn" type="button" onClick={handleExportOrders}>Export Orders</button>
@@ -107,7 +123,7 @@ function UserDashboard({ onToast }) {
       <div className="userdashboard-kpi-row dashboard-row">
         <div className="dashboard-card userdashboard-kpi-card userdashboard-kpi-resources">
           <div className="kpi-label userdashboard-kpi-label">My Resources</div>
-          <div className="kpi-value userdashboard-kpi-value userdashboard-kpi-primary">{filteredProducts.length}</div>
+          <div className="kpi-value userdashboard-kpi-value userdashboard-kpi-primary">{filteredResources.length}</div>
         </div>
         <div className="dashboard-card userdashboard-kpi-card userdashboard-kpi-orders">
           <div className="kpi-label userdashboard-kpi-label">My Orders</div>
@@ -146,23 +162,23 @@ function UserDashboard({ onToast }) {
       </div>
       <motion.div className="card userdashboard-resources-table-card" variants={slideIn} initial="hidden" animate="visible">
         <h3 className="userdashboard-table-title">My Resources</h3>
-        {loading ? <div>Loading...</div> : filteredProducts.length === 0 ? <div>No resources found.</div> : (
+        {loading ? <div>Loading...</div> : filteredResources.length === 0 ? <div>No resources found.</div> : (
           <table className="table userdashboard-resources-table">
             <thead>
               <tr>
                 <th>Name</th>
                 <th>Category</th>
                 <th>Price</th>
-                <th>Stock</th>
+                <th>Quantity</th>
               </tr>
             </thead>
             <tbody>
-              {filteredProducts.map(product => (
-                <tr key={product._id || product.id}>
-                  <td>{product.name}</td>
-                  <td>{product.category}</td>
-                  <td>₹{product.price}</td>
-                  <td>{product.stock}</td>
+              {filteredResources.map(resource => (
+                <tr key={resource.id}>
+                  <td>{resource.name}</td>
+                  <td>{resource.category}</td>
+                  <td>₹{resource.price}</td>
+                  <td>{resource.stock}</td>
                 </tr>
               ))}
             </tbody>
