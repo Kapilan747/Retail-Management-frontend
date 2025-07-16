@@ -3,10 +3,7 @@ import { useNavigate, NavLink, useLocation } from 'react-router-dom';
 import '../styles/main.css';
 import './Navbar.css';
 
-function Navbar({ onLogout }) {
-  const adminName = localStorage.getItem('adminName') || 'Admin';
-  const user = JSON.parse(localStorage.getItem('user') || 'null');
-  const isUser = user && user.role === 'user';
+function Navbar({ user, onLogout }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -18,16 +15,8 @@ function Navbar({ onLogout }) {
         setDropdownOpen(false);
       }
     }
-    if (dropdownOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
+    document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [dropdownOpen]);
-
-  useEffect(() => {
-    document.body.classList.remove('theme-dark', 'theme-light');
   }, []);
 
   return (
@@ -35,29 +24,47 @@ function Navbar({ onLogout }) {
       <div className="navbar-logo" onClick={() => navigate('/')}>RMSSS</div>
       <div className="navbar-links">
         <NavLink to="/" className={({ isActive }) => `navbar-link${isActive && location.pathname === '/' ? ' navbar-link-active' : ''}`}>Homepage</NavLink>
-        {isUser && <NavLink to="/user-dashboard" className={({ isActive }) => `navbar-link${isActive ? ' navbar-link-active' : ''}`}>Dashboard</NavLink>}
-        {isUser && <NavLink to="/marketplace" className={({ isActive }) => `navbar-link${isActive ? ' navbar-link-active' : ''}`}>Marketplace</NavLink>}
-        {!isUser && <NavLink to="/dashboard" className={({ isActive }) => `navbar-link${isActive ? ' navbar-link-active' : ''}`}>Dashboard</NavLink>}
-        {!isUser && <NavLink to="/inventory" className={({ isActive }) => `navbar-link${isActive ? ' navbar-link-active' : ''}`}>Inventory</NavLink>}
-        {!isUser && <NavLink to="/customers" className={({ isActive }) => `navbar-link${isActive ? ' navbar-link-active' : ''}`}>Customers</NavLink>}
-        {!isUser && <NavLink to="/sales" className={({ isActive }) => `navbar-link${isActive ? ' navbar-link-active' : ''}`}>Sales</NavLink>}
-        {!isUser && <NavLink to="/admin-panel" className={({ isActive }) => `navbar-link${isActive ? ' navbar-link-active' : ''}`}>Admin Panel</NavLink>}
-        <div
-          ref={dropdownRef}
-          className="navbar-profile-dropdown-root"
-        >
-          <span
-            className={`navbar-profile-btn${dropdownOpen ? ' open' : ''}`}
-            onClick={() => setDropdownOpen(v => !v)}
-          >
-            Profile
-          </span>
-          {dropdownOpen && (
-            <div className={`navbar-dropdown${dropdownOpen ? ' navbar-dropdown-anim' : ''}`}>
-              <button onClick={onLogout}>Logout</button>
-            </div>
-          )}
-        </div>
+
+        {/* Logged-out User */}
+        {!user && (
+          <NavLink to="/sign-in" className={({ isActive }) => `navbar-link${isActive ? ' navbar-link-active' : ''}`}>Login</NavLink>
+        )}
+
+        {/* Logged-in Admin */}
+        {user && user.role === 'admin' && (
+          <>
+            <NavLink to="/dashboard" className={({ isActive }) => `navbar-link${isActive ? ' navbar-link-active' : ''}`}>Dashboard</NavLink>
+            <NavLink to="/inventory" className={({ isActive }) => `navbar-link${isActive ? ' navbar-link-active' : ''}`}>Inventory</NavLink>
+            <NavLink to="/customers" className={({ isActive }) => `navbar-link${isActive ? ' navbar-link-active' : ''}`}>Customers</NavLink>
+            <NavLink to="/sales" className={({ isActive }) => `navbar-link${isActive ? ' navbar-link-active' : ''}`}>Sales</NavLink>
+            <NavLink to="/admin-panel" className={({ isActive }) => `navbar-link${isActive ? ' navbar-link-active' : ''}`}>Admin Panel</NavLink>
+          </>
+        )}
+
+        {/* Logged-in User */}
+        {user && user.role === 'user' && (
+          <>
+            <NavLink to="/user-dashboard" className={({ isActive }) => `navbar-link${isActive ? ' navbar-link-active' : ''}`}>Dashboard</NavLink>
+            <NavLink to="/marketplace" className={({ isActive }) => `navbar-link${isActive ? ' navbar-link-active' : ''}`}>Marketplace</NavLink>
+          </>
+        )}
+
+        {/* Profile Dropdown for Logged-in Users */}
+        {user && (
+          <div ref={dropdownRef} className="navbar-profile-dropdown-root">
+            <span
+              className={`navbar-profile-btn${dropdownOpen ? ' open' : ''}`}
+              onClick={() => setDropdownOpen(v => !v)}
+            >
+              Profile
+            </span>
+            {dropdownOpen && (
+              <div className={`navbar-dropdown${dropdownOpen ? ' navbar-dropdown-anim' : ''}`}>
+                <button onClick={onLogout}>Logout</button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </nav>
   );
