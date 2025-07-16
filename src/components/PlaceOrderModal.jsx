@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { addOrder, getProducts, updateUserActivity } from '../services/api';
+import { addOrder } from '../services/api';
 import './PlaceOrderModal.css';
 
-function PlaceOrderModal({ open, onClose, onToast, userId, onOrderPlaced }) {
-  const [products, setProducts] = useState([]);
+function PlaceOrderModal({ open, onClose, onToast, userId, onOrderPlaced, products }) {
   const [selected, setSelected] = useState([]); 
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (open) {
-      getProducts().then(res => setProducts(res.data));
       setSelected([]);
       document.body.style.overflow = 'hidden';
     } else {
@@ -67,7 +65,6 @@ function PlaceOrderModal({ open, onClose, onToast, userId, onOrderPlaced }) {
         description,
         ...topLevel
       });
-      await updateUserActivity(userId);
       onToast && onToast('Order placed', '#388e3c');
       onOrderPlaced && onOrderPlaced();
       setTimeout(() => { onClose(); }, 100);

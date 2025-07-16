@@ -46,7 +46,7 @@ function Marketplace({ onToast }) {
         status: 'pending',
         date: new Date().toISOString(),
         quantity: quantity,
-        productId: selectedProduct._id || selectedProduct.id,
+        productId: selectedProduct.id,
         productName: selectedProduct.name,
         price: selectedProduct.price
       };
@@ -112,13 +112,16 @@ function Marketplace({ onToast }) {
                       <div className="marketplace-product-name">{p.name}</div>
                       <div className="marketplace-product-price">₹{p.price}</div>
                       <div className="marketplace-product-stock">Stock: {p.stock}</div>
-                      <button 
-                        className={`btn marketplace-request-btn${p.stock <= 0 ? ' disabled' : ''}`} 
-                        disabled={p.stock <= 0} 
-                        onClick={() => handleRequestGoods(p)}
-                      >
-                        {p.stock > 0 ? 'Request' : 'Out of Stock'}
-                      </button>
+                      {/* Hide Request button for users with role 'user' */}
+                      {user && user.role !== 'user' && (
+                        <button 
+                          className={`btn marketplace-request-btn${p.stock <= 0 ? ' disabled' : ''}`} 
+                          disabled={p.stock <= 0} 
+                          onClick={() => handleRequestGoods(p)}
+                        >
+                          {p.stock > 0 ? 'Request' : 'Out of Stock'}
+                        </button>
+                      )}
                     </div>
                   ))}
                 </div>

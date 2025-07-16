@@ -73,14 +73,6 @@
   color: var(--primary);
   font-weight: 600;
 }
-.adminpanel-inactive {
-  color: var(--text-muted);
-  font-weight: 600;
-}
-.adminpanel-lastactive {
-  color: #888;
-  font-size: 13px;
-}
 .adminpanel-empty-requests {
   text-align: center;
   padding: 40px 20px;

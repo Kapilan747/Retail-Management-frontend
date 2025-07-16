@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getUsers, getOrders, updateOrder, updateUserActivity } from '../services/api';
+import { getUsers, getOrders, updateOrder } from '../services/api';
 import { motion } from 'framer-motion';
 import dashboardLogo from '../images/dashboard-logo.png';
 import './AdminPanel.css';
@@ -22,94 +22,7 @@ function AdminPanel({ onToast }) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    let timer;
-    const resetTimer = () => {
-      clearTimeout(timer);
-      timer = setTimeout(async () => {
-        try {
-          const user = JSON.parse(localStorage.getItem('user') || 'null');
-          if (user && user.id) {
-            await updateUserActivity(user.id, true);
-          }
-        } catch (err) {
-          console.error('Error clearing activity on timeout:', err);
-        }
-        localStorage.removeItem('user');
-        localStorage.removeItem('isAdmin');
-        window.location.href = '/sign-in';
-      }, 4 * 60 * 1000);
-    };
-    
-    const updateActivity = async () => {
-      try {
-        const user = JSON.parse(localStorage.getItem('user') || 'null');
-        if (user && user.id) {
-          console.log('Updating activity for user:', user.id);
-          await updateUserActivity(user.id);
-        }
-      } catch (err) {
-        console.error('Error updating activity:', err);
-      }
-    };
-
-    const updateActivityOnLoad = async () => {
-      try {
-        const user = JSON.parse(localStorage.getItem('user') || 'null');
-        if (user && user.id) {
-          console.log('Initial activity update for user:', user.id);
-          await updateUserActivity(user.id);
-        }
-      } catch (err) {
-        console.error('Error updating initial activity:', err);
-      }
-    };
-
-    window.addEventListener('mousemove', () => {
-      resetTimer();
-      updateActivity();
-    });
-    window.addEventListener('keydown', () => {
-      resetTimer();
-      updateActivity();
-    });
-    window.addEventListener('click', () => {
-      resetTimer();
-      updateActivity();
-    });
-    
-    updateActivityOnLoad();
-    resetTimer();
-    
-    const activityInterval = setInterval(updateActivity, 30000);
-    
-    return () => {
-      clearTimeout(timer);
-      clearInterval(activityInterval);
-      window.removeEventListener('mousemove', resetTimer);
-      window.removeEventListener('keydown', resetTimer);
-      window.removeEventListener('click', resetTimer);
-    };
-  }, []);
-
-  const isUserActive = (user) => {
-    if (!user.lastActive) return false;
-    const timeDiff = Date.now() - new Date(user.lastActive).getTime();
-    const isActive = timeDiff < 1 * 60 * 1000;
-    
-    if (user.username === 'admin') {
-      console.log('Admin activity debug:', {
-        username: user.username,
-        lastActive: user.lastActive,
-        currentTime: new Date().toISOString(),
-        timeDiff: timeDiff,
-        timeDiffMinutes: timeDiff / (1000 * 60),
-        isActive: isActive
-      });
-    }
-    
-    return isActive;
-  };
+  // All user activity tracking and updateUserActivity logic has been removed
 
   const fetchAll = async () => {
     setLoading(true);
@@ -182,8 +95,6 @@ function AdminPanel({ onToast }) {
                 <th>Username</th>
                 <th>Name</th>
                 <th>Role</th>
-                <th>Active</th>
-                <th>Last Active</th>
               </tr>
             </thead>
             <tbody>
@@ -192,14 +103,6 @@ function AdminPanel({ onToast }) {
                   <td>{u.username}</td>
                   <td>{u.name}</td>
                   <td>{u.role}</td>
-                  <td>
-                    {isUserActive(u) ? (
-                      <span className="adminpanel-active">&#9679; Active</span>
-                    ) : (
-                      <span className="adminpanel-inactive">&#9679; Inactive</span>
-                    )}
-                  </td>
-                  <td>{u.lastActive ? new Date(u.lastActive).toLocaleString() : '-'}</td>
                 </tr>
               ))}
             </tbody>

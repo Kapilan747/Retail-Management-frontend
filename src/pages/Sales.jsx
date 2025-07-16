@@ -34,7 +34,7 @@ function Sales({ onToast }) {
           <SaleList key={refresh} onToast={onToast} />
         </div>
         <div className="sales-trend-row">
-          <span className="sales-trend-label">Sales trend: <span className="sales-trend-value">(demo)</span></span>
+          <span className="sales-trend-label">Sales trend: <span className="sales-trend-value"></span></span>
         </div>
       </div>
     </motion.div>

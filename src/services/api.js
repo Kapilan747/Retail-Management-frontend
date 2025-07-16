@@ -28,10 +28,6 @@ export const loginUser = async (username, password) => {
   if (user && !user.id && user._id) user.id = user._id;
   return user;
 };
-export const updateUserActivity = (id, clear = false) => {
-  const data = clear ? { lastActive: null } : { lastActive: new Date().toISOString() };
-  return API.patch(`/users?id=${id}`, data);
-};
 
 export const getOrders = () => API.get('/orders');
 export const addOrder = (data) => API.post('/orders', data);

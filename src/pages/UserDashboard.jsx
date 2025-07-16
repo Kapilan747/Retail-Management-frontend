@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { getOrders } from '../services/api';
+import { getOrders, getProducts } from '../services/api';
 import PlaceOrderModal from '../components/PlaceOrderModal';
 import { motion } from 'framer-motion';
 import { BarChart, Bar, XAxis, YAxis, Tooltip as RTooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend as RLegend } from 'recharts';
@@ -25,6 +25,7 @@ const slideIn = {
 
 function UserDashboard({ onToast }) {
   const [orders, setOrders] = useState([]);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showOrderModal, setShowOrderModal] = useState(false);
   const [dateFrom, setDateFrom] = useState('');
@@ -45,8 +46,19 @@ function UserDashboard({ onToast }) {
     setLoading(false);
   };
 
+  const fetchProducts = async () => {
+    try {
+      const prodRes = await getProducts();
+      setProducts(prodRes.data);
+    } catch (err) {
+      console.error("Failed to fetch products:", err);
+      onToast && onToast('Failed to load products', '#d32f2f');
+    }
+  };
+
   useEffect(() => {
     fetchOrders();
+    fetchProducts();
   }, [user.id]);
 
   const myResources = useMemo(() => {
@@ -54,9 +66,9 @@ function UserDashboard({ onToast }) {
     return approvedOrders.map(order => ({
       id: order.productId,
       name: order.productName,
-      category: order.productCategory || 'General', // Assuming category is stored
+      category: order.productCategory || 'General', 
       price: order.price,
-      stock: order.quantity, // Represents the quantity owned by the user
+      stock: order.quantity, 
     }));
   }, [orders]);
 
@@ -103,7 +115,7 @@ function UserDashboard({ onToast }) {
       animate="visible"
       className="userdashboard-root"
     >
-      <PlaceOrderModal open={showOrderModal} onClose={() => setShowOrderModal(false)} onToast={onToast} userId={user.id} onOrderPlaced={fetchOrders} />
+      <PlaceOrderModal open={showOrderModal} onClose={() => setShowOrderModal(false)} onToast={onToast} userId={user.id} onOrderPlaced={fetchOrders} products={products} />
       <motion.div className="card userdashboard-welcome-card" variants={popIn} initial="hidden" animate="visible">
         <h2 className="userdashboard-welcome-title">Welcome, {user.name || user.username}!</h2>
         <p className="userdashboard-welcome-desc">This is your dashboard. You can view your resources, orders, and place new orders or request goods.</p>

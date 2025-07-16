@@ -17,7 +17,6 @@ import Marketplace from './pages/Marketplace';
 import AdminPanel from './pages/AdminPanel';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
-import { updateUserActivity } from './services/api';
 import Navbar from './components/Navbar';
 
 function ProtectedRoute({ children, user }) {
@@ -51,34 +50,24 @@ function App() {
     return () => clearTimeout(timer);
   }, [location]);
 
-  // Session Timeout and Activity Tracking
+  // Session Timeout (frontend only, no backend activity)
   useEffect(() => {
     if (!user) return;
-
     let activityTimer;
-
     const resetTimer = () => {
       clearTimeout(activityTimer);
       activityTimer = setTimeout(() => {
         handleLogout();
-        // The original code had onToast here, but onToast is not defined in the provided context.
-        // Assuming it should be passed as a prop or handled differently if needed.
-        // For now, commenting out to avoid errors.
-        // onToast && onToast('You have been logged out due to inactivity.', '#f44336');
+        // Optionally show a toast here
       }, 15 * 60 * 1000); // 15 minutes
     };
-
     const handleActivity = () => {
       resetTimer();
-      updateUserActivity(user.id).catch(err => console.error("Failed to update user activity", err));
     };
-
     window.addEventListener('mousemove', handleActivity);
     window.addEventListener('keypress', handleActivity);
     window.addEventListener('click', handleActivity);
-    
-    resetTimer(); // Initial call
-
+    resetTimer();
     return () => {
       clearTimeout(activityTimer);
       window.removeEventListener('mousemove', handleActivity);
@@ -87,18 +76,7 @@ function App() {
     };
   }, [user]);
 
-  const clearUserActivity = async (userId) => {
-    try {
-      await updateUserActivity(userId, true);
-    } catch (err) {
-      console.error('Error clearing user activity:', err);
-    }
-  };
-
   const handleLogout = async () => {
-    if (user && user.id) {
-      await clearUserActivity(user.id);
-    }
     localStorage.removeItem('user');
     setUser(null);
     navigate('/');
