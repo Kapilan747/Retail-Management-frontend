@@ -14,7 +14,7 @@ const fadeItem = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.7 } }
 };
 
-function SignIn({ onToast }) {
+function SignIn({ onToast, onLoginSuccess }) {
   const [form, setForm] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -28,15 +28,13 @@ function SignIn({ onToast }) {
     try {
       const user = await loginUser(form.username, form.password);
       if (user) {
+        localStorage.setItem('user', JSON.stringify(user));
+        onLoginSuccess(); // Notify App.js
+
         if (user.role === 'admin') {
-          localStorage.setItem('isAdmin', 'true');
-          localStorage.removeItem('user');
           navigate('/dashboard');
           onToast && onToast('Admin login successful', '#388e3c');
         } else {
-          if (user && !user.id && user._id) user.id = user._id;
-          localStorage.setItem('user', JSON.stringify(user));
-          localStorage.removeItem('isAdmin');
           navigate('/user-dashboard');
           onToast && onToast('Login successful', '#388e3c');
         }
