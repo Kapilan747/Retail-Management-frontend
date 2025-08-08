@@ -81,7 +81,6 @@
   color: var(--accent, #a259e6);
 }
 
-/* Remove nested card styles */
 .sales-add-card,
 .sales-list-card {
   background: none;

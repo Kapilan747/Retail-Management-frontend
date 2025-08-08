@@ -8,59 +8,95 @@ function AddCustomer({ editing, onDone, onToast }) {
   const [submitting, setSubmitting] = useState(false);
   const nameRef = useRef(null);
 
-  useEffect(() => {
-    if (editing) setForm({ name: editing.name || '', email: editing.email || '', phone: editing.phone || '' });
-    else setForm({ name: '', email: '', phone: '' });
-  }, [editing]);
+
 
   useEffect(() => {
+    if (editing) setForm(
+                         { name: editing.name || '', 
+                           email: editing.email || '', 
+                           phone: editing.phone || '' 
+                          });
+    else setForm(
+                         { name: '', 
+                           email: '', 
+                           phone: '' 
+                          });
+                     }, [editing]);
+
+
+
+  useEffect(() => {
+
     if (nameRef.current) nameRef.current.focus();
+
   }, [editing]);
 
+
+
   useEffect(() => {
-    const handleKey = (e) => {
-      if (e.key === 'Escape') onDone();
-    };
+
+                  const handleKey = (e) => {
+                                              if (e.key === 'Escape') onDone();
+                                            };
+
     window.addEventListener('keydown', handleKey);
+
     return () => window.removeEventListener('keydown', handleKey);
-  }, [onDone]);
+
+
+
+                  }, [onDone]);
+
+
 
   const validate = () => {
-    const errs = {};
-    if (!form.name.trim()) errs.name = 'Name is required';
-    if (!form.email.trim()) errs.email = 'Email is required';
-    return errs;
-  };
+
+                  const errs = {};
+                  if (!form.name.trim()) errs.name = 'Name is required';
+                  if (!form.email.trim()) errs.email = 'Email is required';
+                  return errs;
+
+                        };
 
   const handleChange = e => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: undefined });
-  };
+
+                            setForm({ ...form, [e.target.name]: e.target.value });
+                            setErrors({ ...errors, [e.target.name]: undefined });
+
+                           };
 
   const handleSubmit = async e => {
+
     e.preventDefault();
+
     if (submitting) return;
+
     const errs = validate();
+
     if (Object.keys(errs).length) {
-      setErrors(errs);
-      onToast && onToast('Please fill all required fields', '#d32f2f');
-      return;
+          setErrors(errs);
+          onToast && onToast('Please fill all required fields', '#d32f2f');
+          return;
     }
+
     setSubmitting(true);
+
     try {
-      if (editing) {
-        await updateCustomer(editing.id, form);
-        onToast && onToast('Customer updated', '#1976d2');
-      } else {
-        await addCustomer(form);
-        onToast && onToast('Customer added', '#388e3c');
-      }
-      onDone();
+          if (editing) {
+                    await updateCustomer(editing.id, form);
+                    onToast && onToast('Customer updated', '#1976d2');
+          } else {
+                    await addCustomer(form);
+                    onToast && onToast('Customer added', '#388e3c');
+          }
+          onDone();
+
     } catch (err) {
-      console.error(err);
-      onToast && onToast('Error saving customer', '#d32f2f');
+          console.error(err);
+          onToast && onToast('Error saving customer', '#d32f2f');
     }
     setSubmitting(false);
+
   };
 
   return (
@@ -72,8 +108,10 @@ function AddCustomer({ editing, onDone, onToast }) {
       <div>
         <h2 className="add-customer-title">{editing ? 'Edit Customer' : 'Add Customer'}</h2>
       </div>
+
       <label className="add-customer-label">
         Name<span style={{ color: '#d32f2f' }}>*</span>
+
         <input
           ref={nameRef}
           name="name"
@@ -82,10 +120,14 @@ function AddCustomer({ editing, onDone, onToast }) {
           placeholder="Enter full name"
           className={`add-customer-input${errors.name ? ' error' : ''}`}
         />
+
         {errors.name && <span className="add-customer-error">{errors.name}</span>}
+
       </label>
+
       <label className="add-customer-label">
         Email<span style={{ color: '#d32f2f' }}>*</span>
+
         <input
           name="email"
           type="email"
@@ -94,10 +136,14 @@ function AddCustomer({ editing, onDone, onToast }) {
           placeholder="Enter email address"
           className={`add-customer-input${errors.email ? ' error' : ''}`}
         />
+
         {errors.email && <span className="add-customer-error">{errors.email}</span>}
+
       </label>
+
       <label className="add-customer-label">
         Phone
+
         <input
           name="phone"
           value={form.phone}
@@ -105,19 +151,32 @@ function AddCustomer({ editing, onDone, onToast }) {
           placeholder="Enter phone number (optional)"
           className="add-customer-input"
         />
+
       </label>
+
+
+
       <div className="add-customer-actions">
-        <button
-          className="btn add-customer-btn"
-          type="submit"
-          disabled={submitting}
-        >{submitting ? (editing ? 'Updating...' : 'Adding...') : (editing ? 'Update' : 'Add')}</button>
-        <button
-          className="btn add-customer-btn cancel"
-          type="button"
-          onClick={onDone}
-          disabled={submitting}
-        >Cancel</button>
+            <button
+              className="btn add-customer-btn"
+              type="submit"
+              disabled={submitting}
+            >
+
+            {submitting ? (editing ? 'Updating...' : 'Adding...') : (editing ? 'Update' : 'Add')}
+
+            </button>
+
+
+            <button
+              className="btn add-customer-btn cancel"
+              type="button"
+              onClick={onDone}
+              disabled={submitting}
+            >
+              Cancel
+              
+            </button>
       </div>
     </form>
   );

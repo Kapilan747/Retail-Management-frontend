@@ -10,27 +10,39 @@ function Navbar({ user, onLogout }) {
   const dropdownRef = useRef(null);
 
   useEffect(() => {
+
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownOpen(false);
       }
     }
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
+
   }, []);
 
   return (
     <nav className="navbar-root">
       <div className="navbar-logo" onClick={() => navigate('/')}>RMSSS</div>
       <div className="navbar-links">
-        <NavLink to="/" className={({ isActive }) => `navbar-link${isActive && location.pathname === '/' ? ' navbar-link-active' : ''}`}>Homepage</NavLink>
 
-        {/* Logged-out User */}
+        <NavLink 
+                 to="/" 
+                 className={({ isActive }) => `navbar-link${isActive && location.pathname === '/' ? ' navbar-link-active' : ''}`}>
+
+                 Homepage
+        </NavLink>
+
         {!user && (
-          <NavLink to="/sign-in" className={({ isActive }) => `navbar-link${isActive ? ' navbar-link-active' : ''}`}>Login</NavLink>
+          <NavLink 
+                to="/sign-in" 
+                className={({ isActive }) => `navbar-link${isActive ? ' navbar-link-active' : ''}`}>
+
+                Login
+        </NavLink>
         )}
 
-        {/* Logged-in Admin */}
         {user && user.role === 'admin' && (
           <>
             <NavLink to="/dashboard" className={({ isActive }) => `navbar-link${isActive ? ' navbar-link-active' : ''}`}>Dashboard</NavLink>
@@ -41,7 +53,6 @@ function Navbar({ user, onLogout }) {
           </>
         )}
 
-        {/* Logged-in User */}
         {user && user.role === 'user' && (
           <>
             <NavLink to="/user-dashboard" className={({ isActive }) => `navbar-link${isActive ? ' navbar-link-active' : ''}`}>Dashboard</NavLink>
@@ -49,7 +60,6 @@ function Navbar({ user, onLogout }) {
           </>
         )}
 
-        {/* Profile Dropdown for Logged-in Users */}
         {user && (
           <div ref={dropdownRef} className="navbar-profile-dropdown-root">
             <span

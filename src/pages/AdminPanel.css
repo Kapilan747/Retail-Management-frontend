@@ -141,7 +141,7 @@
 
 .adminpanel-action-btns {
   display: flex;
-  gap: 12px; /* Increased gap for more space */
+  gap: 12px; 
   justify-content: center;
   align-items: center;
 }

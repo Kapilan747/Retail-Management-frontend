@@ -95,7 +95,6 @@ function Marketplace({ onToast }) {
           />
         </div>
 
-        {/* Resources by Category */}
         <div className="marketplace-category-section">
           <h2 className="marketplace-section-title">Resources by Category</h2>
           {loading ? (
@@ -112,7 +111,6 @@ function Marketplace({ onToast }) {
                       <div className="marketplace-product-name">{p.name}</div>
                       <div className="marketplace-product-price">₹{p.price}</div>
                       <div className="marketplace-product-stock">Stock: {p.stock}</div>
-                      {/* Hide Request button for users with role 'user' */}
                       {user && user.role !== 'user' && (
                         <button 
                           className={`btn marketplace-request-btn${p.stock <= 0 ? ' disabled' : ''}`} 

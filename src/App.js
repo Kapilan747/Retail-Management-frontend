@@ -24,10 +24,14 @@ function ProtectedRoute({ children, user }) {
   return <Navigate to="/sign-in" replace />;
 }
 
+
+
 function UserProtectedRoute({ children, user }) {
   if (user && user.role === 'user') return children;
   return <Navigate to="/sign-in" replace />;
 }
+
+
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -35,6 +39,8 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || 'null'));
+
+
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -44,13 +50,16 @@ function App() {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
+
+
   useEffect(() => {
     setLoading(true);
     const timer = setTimeout(() => setLoading(false), 400);
     return () => clearTimeout(timer);
   }, [location]);
 
-  // Session Timeout (frontend only, no backend activity)
+
+
   useEffect(() => {
     if (!user) return;
     let activityTimer;
@@ -58,23 +67,32 @@ function App() {
       clearTimeout(activityTimer);
       activityTimer = setTimeout(() => {
         handleLogout();
-        // Optionally show a toast here
-      }, 15 * 60 * 1000); // 15 minutes
+      }, 15 * 60 * 1000); 
     };
+
+
     const handleActivity = () => {
       resetTimer();
     };
+
+
     window.addEventListener('mousemove', handleActivity);
     window.addEventListener('keypress', handleActivity);
     window.addEventListener('click', handleActivity);
     resetTimer();
+
+
     return () => {
+
       clearTimeout(activityTimer);
       window.removeEventListener('mousemove', handleActivity);
       window.removeEventListener('keypress', handleActivity);
       window.removeEventListener('click', handleActivity);
+
     };
   }, [user]);
+
+
 
   const handleLogout = async () => {
     localStorage.removeItem('user');
@@ -95,34 +113,49 @@ function App() {
     <>
       <CustomCursor />
       <Toast open={toast.open} message={toast.message} color={toast.color} onClose={hideToast} />
+
       {!hideNav && (
         <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', zIndex: 200 }}>
           <Navbar user={user} onLogout={handleLogout} />
         </div>
       )}
+
       <div style={{ display: 'flex', width: '100vw', minHeight: '100vh', paddingTop: !hideNav ? 60 : 0 }}>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh', marginLeft: 0 }}>
+
+
           <main className="main-content">
             {loading ? <LoadingSpinner /> : (
               <Routes location={location} key={location.pathname}>
-                {/* Public Routes */}
+
                 <Route path="/" element={<Home onToast={showToast} />} />
                 <Route path="/sign-in" element={<SignIn onToast={showToast} onLoginSuccess={() => setUser(JSON.parse(localStorage.getItem('user')))} />} />
                 <Route path="/sign-up" element={<SignUp onToast={showToast} />} />
 
-                {/* Admin Routes */}
-                <Route path="/dashboard" element={<ProtectedRoute user={user}><Dashboard onToast={showToast} /></ProtectedRoute>} />
-                <Route path="/inventory" element={<ProtectedRoute user={user}><Inventory onToast={showToast} /></ProtectedRoute>} />
-                <Route path="/customers" element={<ProtectedRoute user={user}><Customers onToast={showToast} /></ProtectedRoute>} />
-                <Route path="/sales" element={<ProtectedRoute user={user}><Sales onToast={showToast} /></ProtectedRoute>} />
-                <Route path="/profile" element={<ProtectedRoute user={user}><Profile onToast={showToast} /></ProtectedRoute>} />
-                <Route path="/admin-panel" element={<ProtectedRoute user={user}><AdminPanel onToast={showToast} /></ProtectedRoute>} />
+                <Route path="/dashboard" element={<ProtectedRoute user={user}>
+                       <Dashboard onToast={showToast} /></ProtectedRoute>} />
 
-                {/* User Routes */}
-                <Route path="/user-dashboard" element={<UserProtectedRoute user={user}><UserDashboard onToast={showToast} /></UserProtectedRoute>} />
-                <Route path="/marketplace" element={<UserProtectedRoute user={user}><Marketplace onToast={showToast} /></UserProtectedRoute>} />
+                <Route path="/inventory" element={<ProtectedRoute user={user}>
+                       <Inventory onToast={showToast} /></ProtectedRoute>} />
 
-                {/* Fallback Route */}
+                <Route path="/customers" element={<ProtectedRoute user={user}>
+                      <Customers onToast={showToast} /></ProtectedRoute>} />
+
+                <Route path="/sales" element={<ProtectedRoute user={user}>
+                      <Sales onToast={showToast} /></ProtectedRoute>} />
+
+                <Route path="/profile" element={<ProtectedRoute user={user}>
+                      <Profile onToast={showToast} /></ProtectedRoute>} />
+
+                <Route path="/admin-panel" element={<ProtectedRoute user={user}>
+                      <AdminPanel onToast={showToast} /></ProtectedRoute>} />
+
+                <Route path="/user-dashboard" element={<UserProtectedRoute user={user}>
+                      <UserDashboard onToast={showToast} /></UserProtectedRoute>} />
+
+                <Route path="/marketplace" element={<UserProtectedRoute user={user}>
+                      <Marketplace onToast={showToast} /></UserProtectedRoute>} />
+
                 <Route path="*" element={<NotFound />} />
               </Routes>
             )}

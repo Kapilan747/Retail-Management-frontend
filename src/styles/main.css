@@ -381,7 +381,6 @@ label {
   to { opacity: 1; transform: scale(1); }
 } 
 
-/* Modal base styles (if any) */
 .modal, .modal-card, .modal-content {
   border-radius: var(--radius) !important;
   box-shadow: var(--shadow);

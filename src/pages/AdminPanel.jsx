@@ -22,7 +22,6 @@ function AdminPanel({ onToast }) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // All user activity tracking and updateUserActivity logic has been removed
 
   const fetchAll = async () => {
     setLoading(true);
@@ -48,7 +47,7 @@ function AdminPanel({ onToast }) {
 
   const handleOrderAction = async (order, status) => {
     try {
-      await updateOrder(order._id || order.id, { status }); // Only send status
+      await updateOrder(order._id || order.id, { status }); 
       onToast && onToast(`Request ${status}`, status === 'approved' ? '#388e3c' : '#d32f2f');
       fetchAll();
     } catch (err) {
